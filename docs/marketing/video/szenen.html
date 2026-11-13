@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Benti Highlight-Video</title>
+<!--
+  Szenen fuer das Highlight-Video (1920 x 1080, 35 s). Deterministisch:
+  render(t) setzt den Zustand fuer Sekunde t - render-video.py ruft das pro Frame auf.
+  Im Browser ansehen (vom Repo-Root per http-Server): /docs/marketing/video/szenen.html?play
+-->
+<style>
+  :root { --bg1:#0d0d15; --bg2:#1d1b3f; --ink:#ececf4; --muted:#a9a9c2; --acc1:#8b7cf6; --acc2:#b57cf0; --ok:#7ee08a; --line:#34345a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg1); }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: var(--ink); position: relative; }
+  #glow { position: absolute; width: 1600px; height: 1600px; border-radius: 50%;
+          background: radial-gradient(closest-side, rgba(110,90,240,.30), transparent); }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .abs { position: absolute; }
+  .grad { background: linear-gradient(90deg, var(--acc1), var(--acc2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .center { left: 0; right: 0; text-align: center; }
+
+  /* Intro / Outro */
+  .logo { width: 170px; height: 170px; border-radius: 38px; box-shadow: 0 20px 60px rgba(120,90,255,.35); }
+  .word { font-size: 120px; font-weight: 800; letter-spacing: -2px; }
+  .tag { font-size: 44px; color: var(--muted); font-weight: 400; }
+  .chip { display: inline-block; padding: 14px 30px; border-radius: 999px; border: 2px solid var(--acc1);
+          color: #d9d2ff; font-size: 30px; font-weight: 600; background: rgba(139,124,246,.12); }
+
+  /* Szene 2 */
+  .h1 { font-size: 86px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+  .sub { font-size: 38px; color: var(--muted); line-height: 1.4; }
+  .euicon { height: 120px; }
+
+  /* Schritte */
+  .step { width: 640px; }
+  .badge { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; font-size: 50px; font-weight: 800;
+           background: linear-gradient(135deg, var(--acc1), var(--acc2)); color: #fff; margin-bottom: 34px; box-shadow: 0 10px 40px rgba(139,124,246,.45); }
+  .step h2 { font-size: 76px; font-weight: 800; line-height: 1.08; margin-bottom: 26px; letter-spacing: -1px; }
+  .step p { font-size: 36px; line-height: 1.4; color: var(--muted); }
+
+  .panel { left: 1060px; top: 150px; width: 560px; border-radius: 30px; overflow: hidden; border: 2px solid var(--line);
+           box-shadow: 0 40px 120px rgba(0,0,0,.6); background: #13131c; }
+  .panel img { width: 560px; display: block; }
+  .drop { border: 3px dashed #6b62c9; border-radius: 16px; background: #171628; display: grid; place-items: center;
+          color: #a99ff5; font-size: 26px; font-weight: 600; text-align: center; }
+  .ring { border-radius: 18px; border: 4px solid var(--ok); box-shadow: 0 0 0 0 rgba(126,224,138,.5), 0 0 40px rgba(126,224,138,.55); }
+  .thumb { width: 260px; border-radius: 14px; box-shadow: 0 25px 60px rgba(0,0,0,.6); border: 2px solid #4a4a70; }
+  .cursor { width: 46px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.6)); }
+
+  /* Szene 5 */
+  .stage5 { left: 360px; top: 230px; width: 1200px; height: 800px; border-radius: 26px; overflow: hidden;
+            border: 2px solid var(--line); box-shadow: 0 40px 120px rgba(0,0,0,.6); }
+  .inner { position: absolute; inset: 0; }
+  .inner img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .lring { border-radius: 14px; border: 4px solid var(--acc1); box-shadow: 0 0 36px rgba(139,124,246,.9); }
+  .cap5 { top: 64px; }
+  .cap5 h2 { font-size: 72px; font-weight: 800; letter-spacing: -1px; }
+  .cap5 p { font-size: 34px; color: var(--muted); margin-top: 10px; }
+
+  /* Szene 6 */
+  .tiles { left: 210px; top: 330px; width: 1500px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+  .tile { background: rgba(28,27,48,.9); border: 2px solid var(--line); border-radius: 26px; padding: 36px 38px; min-height: 240px; }
+  .tile svg { width: 58px; height: 58px; stroke: var(--acc1); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 22px; }
+  .tile b { display: block; font-size: 35px; white-space: nowrap; font-weight: 700; margin-bottom: 8px; }
+  .tile span { font-size: 28px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="glow"></div>
+
+<!-- 1 Intro -->
+<div class="scene" id="s1">
+  <img class="abs logo" id="s1logo" src="../../../icons/icon128.png" alt="" style="left:875px;top:250px">
+  <div class="abs center word" id="s1word" style="top:450px">Benti</div>
+  <div class="abs center tag" id="s1tag" style="top:620px">KI-Bilder <span class="grad" style="font-weight:700">EU-konform</span> kennzeichnen</div>
+</div>
+
+<!-- 2 Problem -->
+<div class="scene" id="s2">
+  <div class="abs center" id="s2chip" style="top:200px"><span class="chip">Seit 2. August 2026 · Art. 50 EU AI Act</span></div>
+  <div class="abs center h1" id="s2h" style="top:330px">KI-Bilder müssen<br><span class="grad">erkennbar gekennzeichnet</span> werden.</div>
+  <div class="abs center sub" id="s2sub" style="top:580px">Dafür gibt es offizielle EU-Icons – Benti setzt sie für dich.</div>
+  <img class="abs euicon" id="s2i1" src="../../../assets/eu-icons/svg/ai-generated_white.svg" alt="" style="top:740px">
+  <img class="abs euicon" id="s2i2" src="../../../assets/eu-icons/svg/ai-modified_white.svg" alt="" style="top:740px">
+</div>
+
+<!-- 3+4 Laden + Herkunft -->
+<div class="scene" id="s34">
+  <div class="abs step" id="st1" style="left:200px;top:300px">
+    <div class="badge">1</div>
+    <h2>Bild laden</h2>
+    <p>Per Klick, Drag &amp; Drop<br>oder einfach Strg+V.</p>
+  </div>
+  <div class="abs step" id="st2" style="left:200px;top:300px">
+    <div class="badge">2</div>
+    <h2>Herkunft wird erkannt</h2>
+    <p>Benti erkennt KI-Herkunftsnachweise – z.&nbsp;B. von ChatGPT – und schlägt den passenden Label-Typ vor.</p>
+  </div>
+  <div class="abs panel" id="panel">
+    <img id="panelImg" src="../quelle/panel-herkunft.png" alt="">
+    <div class="abs drop" id="drop">
+      <div><svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="#a99ff5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0l-5 5m5-5l5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg><br>Bild hier ablegen</div>
+    </div>
+    <div class="abs ring" id="ring"></div>
+  </div>
+  <img class="abs thumb" id="thumb" src="../Wohnzimmer GPT.png" alt="">
+  <svg class="abs cursor" id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 11-6.5 1.2L16 21l-3 1.4-3.6-6.8L4 20z" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/></svg>
+</div>
+
+<!-- 5 Label -->
+<div class="scene" id="s5">
+  <div class="abs center cap5" id="cap5">
+    <h2><span class="badge" style="display:inline-grid;width:76px;height:76px;font-size:42px;margin:0 22px 0 0;vertical-align:middle">3</span>Label setzen – <span class="grad">fertig.</span></h2>
+    <p>Offizielles EU-Label, automatisch gut sichtbar platziert – plus unsichtbare KI-Kennzeichnung in der Datei.</p>
+  </div>
+  <div class="abs stage5">
+    <div class="inner" id="inner5">
+      <img id="imgOrig" src="../Wohnzimmer GPT.png" alt="">
+      <img id="imgLab" src="../beispiel-gekennzeichnet.png" alt="">
+      <div class="abs lring" id="lring"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 Features -->
+<div class="scene" id="s6">
+  <div class="abs center h1" id="s6h" style="top:150px;font-size:76px">Alles drin – und <span class="grad">alles lokal.</span></div>
+  <div class="abs tiles">
+    <div class="tile"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><b>100 % lokal</b><span>Kein Upload, kein Konto</span></div>
+    <div class="tile"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="13" rx="2"/><path d="M8 4h11a2 2 0 012 2v11"/></svg><b>Viele Bilder zugleich</b><span>Einfach alle hineinziehen</span></div>
+    <div class="tile"><svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5"/></svg><b>Alle gängigen Formate</b><span>PNG, JPEG, WebP und SVG</span></div>
+    <div class="tile"><svg viewBox="0 0 24 24"><path d="M9 5h11M9 12h11M9 19h11"/><path d="M4 5l1 1 2-2M4 12l1 1 2-2M4 19l1 1 2-2"/></svg><b>Nachweis-Protokoll</b><span>Als Excel-Liste exportierbar</span></div>
+    <div class="tile"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9.5a3.5 3.5 0 100 5"/></svg><b>Urheberdaten bleiben</b><span>Copyright bleibt erhalten</span></div>
+    <div class="tile"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg><b>Kostenlos</b><span>Open Source (MIT-Lizenz)</span></div>
+  </div>
+</div>
+
+<!-- 7 Outro -->
+<div class="scene" id="s7">
+  <img class="abs logo" id="s7logo" src="../../../icons/icon128.png" alt="" style="left:875px;top:200px">
+  <div class="abs center word" id="s7word" style="top:400px">Benti</div>
+  <div class="abs center tag" id="s7tag" style="top:570px">KI-Bilder kennzeichnen nach EU AI Act</div>
+  <div class="abs center" id="s7chip" style="top:690px"><span class="chip">Kostenlos als Chrome-Erweiterung · 100 % lokal</span></div>
+  <div class="abs center" id="s7url" style="top:820px;font-size:28px;color:var(--muted)">github.com/ItzBenti/Benti</div>
+</div>
+
+<script>
+const DURATION = 35;
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eo = x => 1 - Math.pow(1 - x, 3);                 // ease-out
+const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+// Sichtbarkeit einer Szene mit weichem Ein-/Ausblenden
+const vis = (t, a, b, f = .45) => Math.min(eo(prog(t, a, a + f)), 1 - eio(prog(t, b - f, b)));
+function put(el, { o, x = 0, y = 0, s = 1 } = {}) {
+  if (o !== undefined) el.style.opacity = o;
+  el.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
+}
+// Einblend-Bewegung: von unten herein
+const rise = (t, a, d = .6, dist = 40) => { const p = eo(prog(t, a, a + d)); return { o: p, y: (1 - p) * dist }; };
+
+const K = 560 / 440;                         // Skalierung Panel-Aufnahme (CSS-px der Extension)
+const IMG = { x: 17, y: 106, w: 406, h: 272 };   // Bildbereich im Panel
+const CARD = { x: 16, y: 392.6, w: 408, h: 181.7 };
+const PANEL_FULL = 588.4 * K;
+let LBOX = { x: 1300, y: 940, w: 200, h: 50 };   // Label-Position im 1536x1024-Bild (wird ermittelt)
+
+function render(t) {
+  // Hintergrund-Glow wandert langsam
+  const g = $('glow');
+  g.style.left = (900 + Math.sin(t / 6) * 350 - 800) + 'px';
+  g.style.top = (300 + Math.cos(t / 5) * 220 - 800) + 'px';
+
+  // 1 Intro 0-3.6
+  $('s1').style.opacity = vis(t, -1, 3.6);
+  { const p = prog(t, .15, .85); put($('s1logo'), { o: eo(p), s: .55 + .45 * back(p) }); }
+  put($('s1word'), rise(t, .6, .6, 50));
+  put($('s1tag'), rise(t, 1.1, .7, 40));
+
+  // 2 Problem 3.6-8.4
+  $('s2').style.opacity = vis(t, 3.6, 8.4);
+  put($('s2chip'), rise(t, 3.9));
+  put($('s2h'), rise(t, 4.2, .7, 50));
+  put($('s2sub'), rise(t, 5.0));
+  { const p1 = prog(t, 5.6, 6.2), p2 = prog(t, 5.9, 6.5);
+    $('s2i1').style.left = (960 - 30 - $('s2i1').offsetWidth) + 'px';
+    $('s2i2').style.left = (960 + 30) + 'px';
+    put($('s2i1'), { o: eo(p1), s: .6 + .4 * back(p1) });
+    put($('s2i2'), { o: eo(p2), s: .6 + .4 * back(p2) }); }
+
+  // 3+4 Laden + Herkunft 8.4-19.0
+  $('s34').style.opacity = vis(t, 8.4, 19.0);
+  { // Panel faehrt herein
+    const p = eo(prog(t, 8.5, 9.3));
+    put($('panel'), { o: p, x: (1 - p) * 160 });
+    // Hoehe: erst bis unter das Bild, ab 14.2 voll (Herkunfts-Karte)
+    const hImg = (IMG.y + IMG.h + 12) * K, grow = eio(prog(t, 14.1, 14.9));
+    $('panel').style.height = (hImg + (PANEL_FULL - hImg) * grow) + 'px';
+    // Ablagefeld ueber dem Bild, verschwindet beim Drop
+    const drop = $('drop');
+    Object.assign(drop.style, { left: IMG.x * K + 'px', top: IMG.y * K + 'px', width: IMG.w * K + 'px', height: IMG.h * K + 'px' });
+    const dropOut = eo(prog(t, 10.9, 11.3));
+    drop.style.opacity = 1 - dropOut;
+    // Hervorhebung der Herkunfts-Karte
+    const ring = $('ring');
+    Object.assign(ring.style, { left: (CARD.x * K - 6) + 'px', top: (CARD.y * K - 6) + 'px', width: (CARD.w * K + 12) + 'px', height: (CARD.h * K + 12) + 'px' });
+    const rp = prog(t, 15.0, 15.5), pulse = .65 + .35 * Math.sin((t - 15) * 4);
+    ring.style.opacity = eo(rp) * (t > 15.5 ? pulse : 1) * (1 - prog(t, 18.2, 18.6));
+  }
+  { // Thumbnail wird mit dem Cursor ins Panel gezogen
+    const p = eio(prog(t, 9.6, 10.9));
+    const sx = 300, sy = 820, ex = 1060 + (IMG.x + IMG.w / 2) * K - 130, ey = 150 + (IMG.y + IMG.h / 2) * K - 87;
+    const x = sx + (ex - sx) * p, y = sy + (ey - sy) * p - Math.sin(p * Math.PI) * 140;
+    const appear = eo(prog(t, 9.3, 9.7)), gone = eo(prog(t, 10.9, 11.25));
+    const th = $('thumb'); th.style.left = x + 'px'; th.style.top = y + 'px';
+    put(th, { o: appear * (1 - gone), s: 1 - .25 * gone });
+    const cu = $('cursor'); cu.style.left = (x + 150) + 'px'; cu.style.top = (y + 120) + 'px';
+    put(cu, { o: appear * (1 - eo(prog(t, 11.4, 11.8))) });
+  }
+  { // Texte Schritt 1 -> 2
+    const out1 = eo(prog(t, 13.7, 14.1));
+    const a = rise(t, 9.0, .7, 40); put($('st1'), { o: a.o * (1 - out1), y: a.y - out1 * 30 });
+    put($('st2'), rise(t, 14.2, .7, 40));
+  }
+
+  // 5 Label 19.0-25.6
+  $('s5').style.opacity = vis(t, 19.0, 25.6);
+  put($('cap5'), rise(t, 19.2, .7, 30));
+  { const lab = eo(prog(t, 20.6, 20.9));
+    $('imgLab').style.opacity = lab;
+    const sc = 1200 / 1536, lr = $('lring');
+    Object.assign(lr.style, { left: (LBOX.x * sc - 12) + 'px', top: (LBOX.y * sc - 12) + 'px', width: (LBOX.w * sc + 24) + 'px', height: (LBOX.h * sc + 24) + 'px' });
+    const rp = prog(t, 20.9, 21.3);
+    lr.style.opacity = eo(rp) * (.7 + .3 * Math.sin((t - 21) * 4)) * (1 - prog(t, 24.8, 25.3));
+    put(lr, { o: lr.style.opacity, s: 1.4 - .4 * eo(rp) });
+    // langsamer Zoom auf das Label: Label wandert Richtung Bildmitte,
+    // das Bild deckt den Rahmen dabei immer vollstaendig ab
+    const z = eio(prog(t, 21.6, 24.6)), s = 1 + .9 * z;
+    const cx = (LBOX.x + LBOX.w / 2) * sc, cy = (LBOX.y + LBOX.h / 2) * sc;
+    const px = cx + (620 - cx) * z, py = cy + (520 - cy) * z;
+    const tx = clamp(px - s * cx, 1200 - 1200 * s, 0), ty = clamp(py - s * cy, 800 - 800 * s, 0);
+    const inner = $('inner5');
+    inner.style.transformOrigin = '0 0';
+    inner.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+  }
+
+  // 6 Features 25.6-31.0
+  $('s6').style.opacity = vis(t, 25.6, 31.0);
+  put($('s6h'), rise(t, 25.8, .7, 40));
+  document.querySelectorAll('#s6 .tile').forEach((el, i) => put(el, rise(t, 26.3 + i * .22, .6, 50)));
+
+  // 7 Outro 31.0-35.0 (am Ende ausblenden -> nahtlose Schleife)
+  $('s7').style.opacity = vis(t, 31.0, 35.0, .6);
+  { const p = prog(t, 31.1, 31.8); put($('s7logo'), { o: eo(p), s: .55 + .45 * back(p) }); }
+  put($('s7word'), rise(t, 31.5, .6, 50));
+  put($('s7tag'), rise(t, 31.9, .6, 40));
+  put($('s7chip'), rise(t, 32.3, .6, 40));
+  put($('s7url'), rise(t, 32.7, .6, 30));
+}
+
+// Label-Position aus dem Unterschied Original <-> gekennzeichnet ermitteln
+async function findLabel() {
+  const a = $('imgOrig'), b = $('imgLab');
+  await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  const W = 384, H = 256, c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d', { willReadFrequently: true });
+  x.drawImage(a, 0, 0, W, H); const da = x.getImageData(0, 0, W, H).data;
+  x.drawImage(b, 0, 0, W, H); const db = x.getImageData(0, 0, W, H).data;
+  let x0 = W, y0 = H, x1 = -1, y1 = -1;
+  for (let y = 0; y < H; y++) for (let xx = 0; xx < W; xx++) {
+    const i = (y * W + xx) * 4;
+    if (Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]) > 60) {
+      x0 = Math.min(x0, xx); y0 = Math.min(y0, y); x1 = Math.max(x1, xx); y1 = Math.max(y1, y);
+    }
+  }
+  if (x1 > 0) LBOX = { x: x0 * 4, y: y0 * 4, w: (x1 - x0 + 1) * 4, h: (y1 - y0 + 1) * 4 };
+  return LBOX;
+}
+
+window.READY = findLabel().then(box => { render(0); return box; });
+if (location.search.includes('play')) {
+  const t0 = performance.now();
+  (function loop() { render(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>

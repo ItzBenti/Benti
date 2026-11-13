@@ -26,3 +26,13 @@ Texte bewusst ohne Fachbegriffe (kein C2PA/XMP/IPTC/WYSIWYG) – Zielgruppe sind
 - **Store-Icon** (128×128) ist bereits in `icons/icon128.png`.
 - Der C2PA-Nachweis in den Screenshots ist die **echte** Ausgabe der Extension (nicht nachgestellt).
 - Motiv: `Wohnzimmer GPT.png` (Original mit intakten C2PA-Metadaten).
+
+## Highlight-Video (`benti-highlight.mp4`)
+35 s, 1920×1080, 30 fps, H.264-MP4, ohne Ton; Anfang und Ende blenden ins Dunkel → läuft in PowerPoint nahtlos als Endlosschleife
+(Einfügen → Video → Dieses Gerät; Wiedergabe: Start automatisch, Endloswiedergabe).
+Ablauf: Intro → Art. 50 / EU-Icons → ① Bild laden → ② Herkunft erkannt → ③ Label setzen (Zoom aufs Label) → Funktionen → Outro.
+
+**Neu erzeugen:** Szenen/Texte in `video/szenen.html` (Zeitplan in `render(t)`), dann
+`python docs/marketing/video/render-video.py` (Kontrollbilder: `--stills 10 20 30`).
+Braucht Python, Edge/Chrome und `pip install websocket-client imageio-ffmpeg`.
+
