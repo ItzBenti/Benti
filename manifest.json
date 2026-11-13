@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Benti",
+  "name": "Benti – KI-Bilder kennzeichnen (EU AI Act)",
+  "short_name": "Benti",
   "version": "1.0.0",
   "description": "KI-generierte Bilder gemäß Art. 50 EU AI Act kennzeichnen – sichtbares Label + Metadaten, 100 % lokal im Browser.",
   "icons": {
