@@ -19,7 +19,7 @@ Stand: 2026-11-13 (Funktionsumfang v0.7) · Alle Texte sind einreichfertig formu
 
 **Ausführliche Beschreibung:**
 ```
-Ab dem 2. August 2026 verlangt der EU AI Act (Artikel 50), dass KI-generierte
+Seit dem 2. August 2026 verlangt der EU AI Act (Artikel 50), dass KI-generierte
 Inhalte transparent gekennzeichnet werden. Benti macht das für Bilder
 einfach: Bild laden, Label-Typ wählen, fertig.
 
@@ -28,25 +28,25 @@ einfach: Bild laden, Label-Typ wählen, fertig.
   ist, aber das Motiv nicht stört
 ✔ Automatische Schwarz/Weiß-Wahl je nach Bildhelligkeit
 ✔ Eigenes Logo als Alternative zum EU-Icon
-✔ Batch-Verarbeitung für viele Bilder auf einmal
+✔ Viele Bilder auf einmal kennzeichnen
 ✔ Screenshot direkt mit Strg+V einfügen
-✔ Compliance-Protokoll: Jede Kennzeichnung wird lokal dokumentiert und ist
-  als CSV exportierbar – der Audit-Nachweis fällt nebenbei ab
-✔ Herkunfts-Check: Zeigt beim Laden an, ob ein Bild C2PA Content
-  Credentials oder KI-Metadaten trägt – und schlägt den passenden
+✔ Nachweis-Protokoll: Jede Kennzeichnung wird lokal dokumentiert und lässt
+  sich als Excel-Liste exportieren – der Nachweis fällt nebenbei ab
+✔ Herkunfts-Check: Zeigt beim Laden an, ob ein Bild Herkunftsdaten
+  eines KI-Tools trägt (z. B. von ChatGPT) – und schlägt den passenden
   Label-Typ automatisch vor
-✔ Maschinenlesbar: schreibt beim Export den IPTC-"DigitalSourceType" in
-  die Metadaten – vorhandene Angaben wie Copyright und EXIF bleiben erhalten
-✔ PNG, JPEG und WebP mit Qualitätsstufen, DPI-Angabe und Ausgabeziel-
-  Vorgaben (Social, Web, Print, Mobile) inkl. Lesbarkeits-Prüfung
-✔ SVG bleibt Vektor: Das EU-Icon wird als Vektor eingebettet, nichts wird
-  gerastert
+✔ Maschinenlesbar: Zusätzlich zum sichtbaren Label wird eine unsichtbare
+  KI-Kennzeichnung in die Datei geschrieben, die Programme und Plattformen
+  auslesen können – Copyright- und Kameradaten bleiben dabei erhalten
+✔ PNG, JPEG und WebP in wählbarer Qualität – mit Vorgaben für Social
+  Media, Web, Druck und Mobil, damit das Label überall lesbar bleibt
+✔ SVG-Grafiken bleiben in jeder Größe gestochen scharf – samt Label
 ✔ Eigene Dateinamen-Muster (z. B. {name}_{date}) und frei wählbarer
   Ablageordner
 ✔ Team-Vorlagen: Einstellungen als Datei exportieren und an Kolleg:innen
   weitergeben – alle kennzeichnen einheitlich
-✔ Optional (experimentell): unsichtbares Wasserzeichen, das auch das
-  Entfernen der Metadaten übersteht
+✔ Optional (experimentell): unsichtbares Wasserzeichen, das selbst dann
+  erhalten bleibt, wenn die Datei-Informationen entfernt werden
 
 🔒 Datenschutz per Architektur: Alle Berechnungen laufen lokal in Ihrem
 Browser. Kein Bild verlässt jemals Ihren Rechner, kein Konto, keine Werbung,

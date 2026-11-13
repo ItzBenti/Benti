@@ -33,7 +33,7 @@ Geplant: **Web-App** (identische Codebasis, GitHub Pages) sowie eine downscale-f
 
 ## Rechtlicher Hinweis
 
-Dieses Tool unterstützt die sichtbare Kennzeichnungspflicht für Deployer (Art. 50 Abs. 4 EU AI Act, gültig ab 02.08.2026). Es ersetzt keine Rechtsberatung und erfüllt keine Provider-Pflichten (Art. 50 Abs. 2, z. B. C2PA-Signierung). Der Anbieter übernimmt keine Gewähr dafür, dass die Nutzung von Benti die Anforderungen des Art. 50 EU AI Act vollständig erfüllt, und keine Verpflichtung, das Tool fortlaufend an Änderungen der Rechtslage anzupassen. Die Prüfung der rechtlichen Korrektheit obliegt stets der Nutzerin bzw. dem Nutzer.
+Dieses Tool unterstützt die sichtbare Kennzeichnungspflicht für Deployer (Art. 50 Abs. 4 EU AI Act, gültig seit 02.08.2026). Es ersetzt keine Rechtsberatung und erfüllt keine Provider-Pflichten (Art. 50 Abs. 2, z. B. C2PA-Signierung). Der Anbieter übernimmt keine Gewähr dafür, dass die Nutzung von Benti die Anforderungen des Art. 50 EU AI Act vollständig erfüllt, und keine Verpflichtung, das Tool fortlaufend an Änderungen der Rechtslage anzupassen. Die Prüfung der rechtlichen Korrektheit obliegt stets der Nutzerin bzw. dem Nutzer.
 
 ## Lizenz
 

@@ -6,8 +6,14 @@ Fertige Grafiken für die Chrome-Web-Store-Einreichung (Dark-Design).
 | Datei | Zeigt |
 |---|---|
 | `store-1-kennzeichnen.png` | Kernnutzen: Bild geladen + EU-Label-Vorschau + Herkunfts-Check |
-| `store-2-herkunft.png` | Automatische C2PA-/KI-Herkunftserkennung („signiert von OpenAI OpCo, LLC") |
+| `store-2-herkunft.png` | Automatische KI-Herkunftserkennung („signiert von OpenAI OpCo, LLC") |
 | `store-3-formate.png` | Ergebnis mit sichtbarem EU-Label + Formate/Metadaten/Protokoll |
+
+**Neu erzeugen** (13.11.2026 eingeführt): Texte in `quelle/store-vorlage.html` ändern, dann
+`python docs/marketing/quelle/render-store.py` – braucht nur Python + Edge/Chrome.
+`quelle/panel-oben.png` und `quelle/panel-herkunft.png` sind echte Aufnahmen der
+Extension (440 px Side-Panel-Breite, 2-fach) mit echtem C2PA-Fund; nach UI-Änderungen neu aufnehmen.
+Texte bewusst ohne Fachbegriffe (kein C2PA/XMP/IPTC/WYSIWYG) – Zielgruppe sind Nicht-Techniker.
 
 ## Weitere Assets
 | Datei | Zweck |
@@ -18,7 +24,5 @@ Fertige Grafiken für die Chrome-Web-Store-Einreichung (Dark-Design).
 
 ## Hinweise
 - **Store-Icon** (128×128) ist bereits in `icons/icon128.png`.
-- Der C2PA-Nachweis in `store-2` gibt die **echte** Extension-Ausgabe wieder
-  (die WASM-Engine läuft in der headless-Render-Umgebung nicht, daher wurde der
-  bereits verifizierte Text originalgetreu reproduziert).
-- Erzeugt mit `scripts/` bzw. dem Render-Setup; Motiv: eines der drei Originale.
+- Der C2PA-Nachweis in den Screenshots ist die **echte** Ausgabe der Extension (nicht nachgestellt).
+- Motiv: `Wohnzimmer GPT.png` (Original mit intakten C2PA-Metadaten).

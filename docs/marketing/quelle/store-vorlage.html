@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Benti Store-Screenshot</title>
+<!--
+  Vorlage fuer die Chrome-Web-Store-Screenshots (1280 x 800).
+  Variante per URL-Parameter: store-vorlage.html?s=1 | 2 | 3
+  Rendern: python render-store.py (im selben Ordner)
+-->
+<style>
+  :root { --bg1:#0f0f17; --bg2:#1a1a35; --ink:#ececf4; --muted:#b4b4c8; --acc1:#8b7cf6; --acc2:#b57cf0; --ok:#7ee08a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 800px; overflow: hidden; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: var(--ink);
+         background: radial-gradient(1200px 700px at 100% 0%, var(--bg2), transparent 60%), var(--bg1); }
+  .wrap { display: grid; grid-template-columns: 560px 1fr; align-items: center; height: 100%; padding: 0 72px; gap: 40px; }
+  .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 30px; }
+  .brand img { width: 46px; height: 46px; border-radius: 11px; }
+  .brand span { font-size: 28px; font-weight: 700; color: var(--acc1); }
+  h1 { font-size: 54px; line-height: 1.08; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 22px; }
+  h1 em { font-style: normal; background: linear-gradient(90deg, var(--acc1), var(--acc2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { font-size: 21px; line-height: 1.5; color: var(--muted); margin-bottom: 30px; }
+  ul { list-style: none; display: grid; gap: 14px; }
+  li { display: grid; grid-template-columns: 26px 1fr; font-size: 20px; line-height: 1.35; }
+  li::before { content: "✓"; color: var(--ok); font-weight: 700; }
+  .stage { display: flex; justify-content: center; align-items: center; }
+  .panel { width: 400px; height: 680px; overflow: hidden; border-radius: 22px; border: 1px solid #34345a;
+           box-shadow: 0 30px 80px rgba(0,0,0,.55); background: #13131c; }
+  .panel img { width: 400px; display: block; }
+  .panel.kurz { height: auto; }
+  .photo { width: 540px; border-radius: 20px; border: 1px solid #34345a; box-shadow: 0 30px 80px rgba(0,0,0,.55); display: block; }
+  .v { display: none; } body[data-s="1"] .v1, body[data-s="2"] .v2, body[data-s="3"] .v3 { display: contents; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <div class="brand"><img src="../../../icons/icon128.png" alt=""><span>Benti</span></div>
+
+    <div class="v v1">
+      <h1>KI-Bilder <em>EU&#8209;konform</em> kennzeichnen</h1>
+      <p class="sub">Sichtbares Label nach Art. 50 EU AI Act – in Sekunden. 100&nbsp;% lokal im Browser, kein Upload, kein Konto.</p>
+      <ul>
+        <li>Offizielle EU-Icons oder eigenes Logo</li>
+        <li>Label wird automatisch gut sichtbar platziert – mit Live&#8209;Vorschau</li>
+        <li>Viele Bilder auf einmal kennzeichnen</li>
+      </ul>
+    </div>
+
+    <div class="v v2">
+      <h1>Erkennt <em>KI&#8209;Herkunft</em> automatisch</h1>
+      <p class="sub">Prüft beim Laden, ob ein Bild Herkunftsdaten eines KI-Tools trägt – und schlägt gleich den passenden Label-Typ vor.</p>
+      <ul>
+        <li>Erkennt Herkunftsnachweise z.&nbsp;B. von ChatGPT</li>
+        <li>Passender Label-Typ wird vorgeschlagen</li>
+        <li>Ehrlich: Fehlende Daten heißen nie „kein KI-Bild“</li>
+      </ul>
+    </div>
+
+    <div class="v v3">
+      <h1><em>Sichtbar</em> + maschinenlesbar</h1>
+      <p class="sub">Sichtbares EU-Label im Bild – plus eine unsichtbare KI&#8209;Kennzeichnung in der Datei, die Programme und Plattformen auslesen können.</p>
+      <ul>
+        <li>PNG, JPEG, WebP und SVG</li>
+        <li>Copyright- und Kameradaten bleiben erhalten</li>
+        <li>Nachweis&#8209;Protokoll als Excel&#8209;Liste</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="v v1"><div class="panel"><img src="panel-oben.png" alt=""></div></div>
+    <div class="v v2"><div class="panel kurz"><img src="panel-herkunft.png" alt=""></div></div>
+    <div class="v v3"><img class="photo" src="../beispiel-gekennzeichnet.png" alt=""></div>
+  </div>
+</div>
+<script>document.body.dataset.s = new URLSearchParams(location.search).get('s') || '1';</script>
+</body>
+</html>
