@@ -184,10 +184,12 @@ Funktioniert in der neu geladenen Extension (Side Panel) · keine Konsolen-Fehle
 - [x] **Fix 13.11.:** `assets/eu-icons/svg/` fehlte im ZIP → der SVG-Workflow hätte in der Store-Version kein EU-Icon gesetzt und trotzdem eine „gekennzeichnete" SVG exportiert und protokolliert. Ordner ist jetzt im Paket; zusätzlich bricht der SVG-Export ab, statt eine SVG ohne sichtbares Label auszugeben. Gepacktes ZIP im Browser geprüft: SVG (beide Label-Typen), PNG-Export inkl. DST-Roundtrip + pHYs, keine JS-Fehler; C2PA-Erkennung in der Extension von Andreas bestätigt (13.11.)
 - [x] Version 1.0.0 für die Store-Einreichung; Kontakt-Mail in PRIVACY.md auf benti.labs@gmail.com umgestellt
 - [x] Store-Texte + Datenschutz-Angaben in docs/STORE-LISTING.md einreichfertig
-- [ ] **[Andreas]** Developer-Konto (5 $) registrieren
+- [x] Developer-Konto (5 $) registriert
 - [x] Screenshots (1280×800) + Promo-Tile (440×280) — fertig in `docs/marketing/`
 - [x] Store-Texte 13.11. auf aktuellen Funktionsumfang gebracht (Formate, SVG, Metadaten-Erhalt, Dateinamen, Team-Vorlagen, Wasserzeichen) + Remote-Code-Angabe
-- [ ] **[Andreas]** ZIP hochladen, Texte/Grafiken einfügen, einreichen
+- [x] ZIP 1.0.0 hochgeladen, Texte/Grafiken eingefügt, **am 13.11.2026 zur Prüfung eingereicht** (Datennutzung: nichts erfasst; drei Zusicherungen bestätigt)
+- [ ] Nach Freigabe: Store-Link in README + Datenschutzerklärung ergänzen
+- [ ] Optional: große Werbekachel (1400×560) — nur relevant, falls Google Benti hervorhebt; jederzeit ohne neue Prüfung nachreichbar
 
 ### US-4.2 Web-App auf GitHub Pages
 - [x] `chrome.*`-Fallbacks (s. TECH-SPEC §6): storage → localStorage (`bentiStore`-Abstraktion), downloads → Anchor (bereits vorhanden), `chrome.runtime`/Manifest-Version abgesichert
