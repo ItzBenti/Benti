@@ -1,0 +1,129 @@
+<!doctype html><html><head><meta charset="utf-8"><title>WM-PROTO</title>
+<style>body{font-family:monospace;background:#0d0d12;color:#e8e8ee;padding:16px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #333;padding:4px 8px;text-align:right}
+th{color:#9ab}td.ok{color:#5fd07f}td.bad{color:#e06a6a}td.l{text-align:left;color:#ccd}</style>
+</head><body>
+<h2>Unsichtbares Wasserzeichen – Robustheits-Prototyp (DCT-QIM, blind)</h2>
+<div id="out">läuft…</div>
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// 8×8 orthonormale DCT-II als Matrixmultiplikation  (F = C·f·Cᵀ ; f = Cᵀ·F·C)
+// ─────────────────────────────────────────────────────────────────────────────
+const N = 8;
+const C = new Float64Array(N*N);
+for (let k=0;k<N;k++){const a=k===0?Math.sqrt(1/N):Math.sqrt(2/N);
+  for (let n=0;n<N;n++) C[k*N+n]=a*Math.cos(Math.PI*(2*n+1)*k/(2*N));}
+function mul(A,B){const o=new Float64Array(N*N);
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){let s=0;for(let k=0;k<N;k++)s+=A[i*N+k]*B[k*N+j];o[i*N+j]=s;}return o;}
+const Ct=new Float64Array(N*N);for(let i=0;i<N;i++)for(let j=0;j<N;j++)Ct[i*N+j]=C[j*N+i];
+const fwd=f=>mul(mul(C,f),Ct);
+const inv=F=>mul(mul(Ct,F),C);
+
+// Wir kodieren in EINEM mittelfrequenten Koeffizienten pro 8×8-Block (grüner Kanal).
+const U=2, V=1, COEF=U*N+V;
+const parity=q=>((q%2)+2)%2;
+
+// QIM-Einbetten: einen Payload-Bit in Koeffizient über Quantisierungs-Parität
+function embedBlock(f, bit, delta){
+  const F=fwd(f); const cq=F[COEF]/delta; let q=Math.round(cq);
+  if(parity(q)!==bit) q += (cq>q)?1:-1;      // ±1 flippt Parität, Richtung = minimale Verzerrung
+  F[COEF]=q*delta; return inv(F);
+}
+function detectBlock(f, delta){ const F=fwd(f); return parity(Math.round(F[COEF]/delta)); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Payload (feste 16 Bit) über alle Blöcke wiederholt streuen → Mehrheitsentscheid
+// ─────────────────────────────────────────────────────────────────────────────
+const PAYLOAD=[1,0,1,1,0,0,1,0,1,1,1,0,0,1,0,1];      // z.B. Kennung "KI-generiert"
+const PL=PAYLOAD.length;
+
+function embed(imgData, W, H, delta){
+  const d=imgData.data; const nbx=W>>3, nby=H>>3;
+  for(let by=0;by<nby;by++)for(let bx=0;bx<nbx;bx++){
+    const idx=by*nbx+bx, bit=PAYLOAD[idx%PL];
+    const f=new Float64Array(N*N);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){const px=((by*N+y)*W+(bx*N+x))*4;f[y*N+x]=d[px+1];}
+    const g=embedBlock(f,bit,delta);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){const px=((by*N+y)*W+(bx*N+x))*4;
+      d[px+1]=Math.max(0,Math.min(255,Math.round(g[y*N+x])));}
+  }
+  return imgData;
+}
+function detect(imgData, W, H, delta){
+  const d=imgData.data; const nbx=W>>3, nby=H>>3;
+  const votes1=new Int32Array(PL), votesTot=new Int32Array(PL);
+  let blockAgree=0, blockTot=0;
+  for(let by=0;by<nby;by++)for(let bx=0;bx<nbx;bx++){
+    const idx=by*nbx+bx, want=PAYLOAD[idx%PL];
+    const f=new Float64Array(N*N);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){const px=((by*N+y)*W+(bx*N+x))*4;f[y*N+x]=d[px+1];}
+    const b=detectBlock(f,delta);
+    votesTot[idx%PL]++; if(b===1)votes1[idx%PL]++;
+    blockTot++; if(b===want)blockAgree++;
+  }
+  const rec=[]; for(let i=0;i<PL;i++) rec.push(votes1[i]*2>=votesTot[i]?1:0);
+  let bitErr=0; for(let i=0;i<PL;i++) if(rec[i]!==PAYLOAD[i]) bitErr++;
+  return {payloadOK:bitErr===0, bitErr, blockBER:1-blockAgree/blockTot};
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Test-Bilder + Verzerrungen (echtes JPEG-Recompress & Resize über Canvas)
+// ─────────────────────────────────────────────────────────────────────────────
+const SZ=512;
+function mkCanvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
+function testImage(kind){
+  const c=mkCanvas(SZ,SZ),x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,SZ,SZ);g.addColorStop(0,'#88a');g.addColorStop(1,'#dc8');
+  x.fillStyle=g;x.fillRect(0,0,SZ,SZ);
+  if(kind==='textur'){for(let i=0;i<40000;i++){x.fillStyle='rgba('+(Math.random()*255|0)+','+(Math.random()*255|0)+','+(Math.random()*255|0)+',0.15)';x.fillRect(Math.random()*SZ,Math.random()*SZ,2,2);}}
+  if(kind==='formen'){for(let i=0;i<60;i++){x.fillStyle='hsl('+(Math.random()*360)+',60%,'+(20+Math.random()*60)+'%)';x.beginPath();x.arc(Math.random()*SZ,Math.random()*SZ,10+Math.random()*60,0,7);x.fill();}}
+  return c;
+}
+function getData(c){return c.getContext('2d').getImageData(0,0,c.width,c.height);}
+function putData(id,w,h){const c=mkCanvas(w,h);c.getContext('2d').putImageData(id,0,0);return c;}
+
+function jpeg(canvas,q){return new Promise(res=>{const im=new Image();im.onload=()=>{const c=mkCanvas(canvas.width,canvas.height);c.getContext('2d').drawImage(im,0,0);res(c);};im.src=canvas.toDataURL('image/jpeg',q);});}
+function resize(canvas,w){const h=Math.round(canvas.height*w/canvas.width);const c=mkCanvas(w,h);const cx=c.getContext('2d');cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cx.drawImage(canvas,0,0,w,h);return c;}
+
+async function run(){
+  const DELTA=[12,24];
+  const rows=[];
+  for(const kind of ['glatt','textur','formen']){
+    for(const delta of DELTA){
+      // einbetten
+      const base=testImage(kind);
+      const wm=putData(embed(getData(base),SZ,SZ,delta),SZ,SZ);
+      // sichtbare Verzerrung (PSNR grob über grün)
+      const a=getData(base).data,b=getData(wm).data;let se=0;for(let i=1;i<a.length;i+=4){const dv=a[i]-b[i];se+=dv*dv;}
+      const mse=se/(a.length/4),psnr=10*Math.log10(255*255/(mse||1e-9));
+      const tests={};
+      tests['clean']=detect(getData(wm),SZ,SZ,delta);
+      tests['jpeg85']=detect(getData(await jpeg(wm,0.85)),SZ,SZ,delta);
+      tests['jpeg60']=detect(getData(await jpeg(wm,0.60)),SZ,SZ,delta);
+      // Downscale → wieder hoch auf Originalgröße (Resync durch Reskalierung)
+      tests['↓75%→↑']=detect(getData(resize(resize(wm,Math.round(SZ*0.75)),SZ)),SZ,SZ,delta);
+      tests['↓50%→↑']=detect(getData(resize(resize(wm,256),SZ)),SZ,SZ,delta);
+      tests['↓50%→↑+jpeg75']=detect(getData(await jpeg(resize(resize(wm,256),SZ),0.75)),SZ,SZ,delta);
+      // Downscale und OHNE Resync bei Empfangsgröße detektieren (naiv, erwartet Fehlschlag)
+      const small=resize(wm,256);
+      tests['↓50% (kein Resync)']=detect(getData(small),256,256,delta);
+      rows.push({kind,delta,psnr,tests});
+    }
+  }
+  render(rows);
+  window.__RESULTS=rows; document.title='READY';
+}
+
+function render(rows){
+  const cols=Object.keys(rows[0].tests);
+  let h='<table><tr><th class="l">Bild</th><th>Δ</th><th>PSNR dB</th>';
+  cols.forEach(c=>h+='<th>'+c+'</th>');h+='</tr>';
+  rows.forEach(r=>{h+='<tr><td class="l">'+r.kind+'</td><td>'+r.delta+'</td><td>'+r.psnr.toFixed(1)+'</td>';
+    cols.forEach(c=>{const t=r.tests[c];const cls=t.payloadOK?'ok':'bad';
+      h+='<td class="'+cls+'">'+(t.payloadOK?'✓':'✗')+' '+(t.blockBER*100).toFixed(0)+'%</td>';});
+    h+='</tr>';});
+  h+='</table><p class="l">✓/✗ = 16-Bit-Payload vollständig wiederhergestellt · Prozent = Block-Bitfehlerrate (0%=perfekt, ~50%=Zufall)</p>';
+  document.getElementById('out').innerHTML=h;
+}
+run().catch(e=>{document.getElementById('out').textContent='ERR: '+e.message;document.title='READY';});
+</script></body></html>
