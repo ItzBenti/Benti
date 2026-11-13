@@ -19,6 +19,7 @@ OUT = os.path.join(ROOT, 'benti-extension.zip')
 # assets/eu-icons/svg wird vom SVG-Workflow (US-3.6) zur Laufzeit geladen.
 INCLUDE = [
     'LICENSE',          # MIT-Hinweis muss mit jeder Kopie mitgeliefert werden
+    'THIRD-PARTY-NOTICES.md',
     'manifest.json',
     'service-worker.js',
     'Benti_MVP.html',

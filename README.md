@@ -37,6 +37,6 @@ Dieses Tool unterstützt die sichtbare Kennzeichnungspflicht für Deployer (Art.
 
 ## Lizenz
 
-MIT-Lizenz © 2026 Benti.Labs – siehe [`LICENSE`](LICENSE). Mitgelieferte Fremdkomponenten (C2PA-Bibliothek in `libs/c2pa/`, offizielle EU-Icons in `assets/eu-icons/`) behalten ihre eigenen Lizenzen bzw. Nutzungsbedingungen.
+MIT-Lizenz © 2026 Benti.Labs – siehe [`LICENSE`](LICENSE). Mitgelieferte Fremdkomponenten (C2PA-Bibliothek in `libs/c2pa/`, offizielle EU-Icons in `assets/eu-icons/`) behalten ihre eigenen Lizenzen bzw. Nutzungsbedingungen – siehe [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
 
 Kontakt: benti.labs@gmail.com
